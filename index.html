@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-lang="zh">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,43 +11,26 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="icon-256.png">
 <style>
-  /* ============ tokens（OKLCH；暗色=变量重映射而非重涂） ============ */
+  /* ============ tokens（OKLCH，暗色定调） ============ */
   :root {
-    --canvas: oklch(0.985 0.003 250);
-    --surface: oklch(1 0 0);
-    --ink: oklch(0.235 0.02 258);
-    --ink-muted: oklch(0.5 0.02 258);
-    --accent: oklch(0.52 0.15 258);
-    --accent-ink: oklch(0.99 0.005 258);
-    --accent-soft: oklch(0.94 0.03 258);
+    --canvas: oklch(0.15 0.018 262);
+    --surface: oklch(0.19 0.02 262);
+    --surface-2: oklch(0.225 0.022 262);
+    --ink: oklch(0.95 0.008 262);
+    --muted: oklch(0.67 0.02 262);
+    --faint: oklch(0.5 0.02 262);
+    --accent: oklch(0.68 0.13 255);
+    --accent-ink: oklch(0.14 0.02 255);
+    --violet: oklch(0.68 0.12 300);
+    --ok: oklch(0.72 0.12 155);
+    --ring: 0 0 0 1px oklch(1 0 0 / 0.08);
+    --ring-hover: 0 0 0 1px oklch(1 0 0 / 0.15);
     --hairline: 1px;
-    --elevation-raised:
-      0 0 0 1px oklch(0.2 0.02 258 / 0.06),
-      0 1px 3px oklch(0.2 0.02 258 / 0.05),
-      0 6px 16px -6px oklch(0.2 0.02 258 / 0.06);
-    --elevation-raised-hover:
-      0 0 0 1px oklch(0.2 0.02 258 / 0.09),
-      0 1px 3px oklch(0.2 0.02 258 / 0.07),
-      0 8px 20px -6px oklch(0.2 0.02 258 / 0.09);
   }
   @media (min-resolution: 2dppx) { :root { --hairline: 0.5px; } }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --canvas: oklch(0.19 0.015 258);
-      --surface: oklch(0.235 0.015 258);
-      --ink: oklch(0.93 0.008 258);
-      --ink-muted: oklch(0.68 0.015 258);
-      --accent: oklch(0.66 0.11 258);
-      --accent-ink: oklch(0.16 0.02 258);
-      --accent-soft: oklch(0.31 0.05 258);
-      --elevation-raised: 0 0 0 1px oklch(1 0 0 / 0.09);
-      --elevation-raised-hover: 0 0 0 1px oklch(1 0 0 / 0.14);
-    }
-  }
 
-  /* ============ base ============ */
   * { box-sizing: border-box; margin: 0; }
-  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; color-scheme: dark; }
   body {
     font-family: -apple-system, "SF Pro Text", "Segoe UI", system-ui,
       "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
@@ -55,119 +38,232 @@
     background: var(--canvas);
     color: var(--ink);
     font-size: 16px;
-    line-height: 1.55;
+    line-height: 1.6;
+    overflow-x: hidden;
   }
   a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: from-font; }
-  a:hover { text-decoration-thickness: 2px; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-  ::selection { background: var(--accent-soft); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+  ::selection { background: oklch(0.4 0.1 255); }
+  .wrap { max-width: 1120px; margin-inline: auto; padding-inline: 24px; }
 
-  .wrap { max-width: 1080px; margin-inline: auto; padding-inline: 24px; }
-
-  /* ============ 语言切换（双语内容常驻 DOM，CSS 控显隐） ============ */
+  /* 双语内容常驻 DOM，CSS 控显隐 */
   :root[data-lang="zh"] [data-l="en"] { display: none; }
   :root[data-lang="en"] [data-l="zh"] { display: none; }
 
+  /* ============ 氛围光（静态渐变，不动、不抢） ============ */
+  .aurora {
+    position: absolute; inset: 0; z-index: -1; overflow: hidden;
+    pointer-events: none; user-select: none;
+  }
+  .aurora::before, .aurora::after {
+    content: ""; position: absolute; border-radius: 50%;
+    filter: blur(90px);
+  }
+  .aurora::before {
+    width: 720px; height: 720px; top: -320px; left: 50%; transform: translateX(-72%);
+    background: radial-gradient(closest-side, oklch(0.55 0.16 255 / 0.34), transparent 72%);
+  }
+  .aurora::after {
+    width: 560px; height: 560px; top: -220px; left: 50%; transform: translateX(6%);
+    background: radial-gradient(closest-side, oklch(0.55 0.15 305 / 0.22), transparent 72%);
+  }
+
   /* ============ header ============ */
-  header { padding-block: 20px; }
+  header { padding-block: 22px; position: relative; }
   header .wrap { display: flex; align-items: center; gap: 12px; }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; letter-spacing: -0.01em; }
-  .brand img { width: 28px; height: 28px; border-radius: 6px; }
+  .brand img { width: 30px; height: 30px; border-radius: 7px; box-shadow: var(--ring); }
   .lang-toggle {
     margin-inline-start: auto;
-    font: inherit; font-size: 13px; letter-spacing: 0.04em;
-    color: var(--ink-muted);
-    background: none; border: none; padding: 6px 10px; border-radius: 8px;
-    cursor: pointer;
-    transition: color 150ms ease-out, background-color 150ms ease-out;
+    font: inherit; font-size: 13px; letter-spacing: 0.05em;
+    color: var(--muted); background: none;
+    border: none; padding: 7px 12px; border-radius: 999px;
+    box-shadow: var(--ring); cursor: pointer;
+    transition: color 150ms ease-out, box-shadow 150ms ease-out;
   }
-  .lang-toggle:hover { color: var(--ink); background: var(--accent-soft); }
+  .lang-toggle:hover { color: var(--ink); box-shadow: var(--ring-hover); }
 
   /* ============ hero ============ */
-  .hero { padding-block: 72px 56px; text-align: center; }
+  .hero { position: relative; padding-block: 84px 40px; text-align: center; }
+  .eyebrow {
+    display: inline-block; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); padding: 6px 14px; border-radius: 999px; box-shadow: var(--ring);
+    background: oklch(1 0 0 / 0.03);
+  }
   .hero h1 {
-    font-size: clamp(2.3rem, 5.5vw, 3.4rem);
-    font-weight: 700;
-    letter-spacing: -0.022em;
-    line-height: 1.12;
+    margin-top: 26px;
+    font-size: clamp(2.6rem, 6.4vw, 4.4rem);
+    font-weight: 750;
+    letter-spacing: -0.032em;
+    line-height: 1.06;
     text-wrap: balance;
   }
+  .hero h1 .grad {
+    background: linear-gradient(92deg, var(--accent), var(--violet));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
   .hero p.lede {
-    margin: 20px auto 0;
-    max-width: 42ch;
-    font-size: 1.15rem;
-    color: var(--ink-muted);
+    margin: 22px auto 0;
+    max-width: 46ch;
+    font-size: 1.16rem;
+    color: var(--muted);
     text-wrap: pretty;
   }
-  .cta-row { margin-top: 36px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; align-items: center; }
+  .cta-row { margin-top: 36px; display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap; }
   .btn-primary {
     display: inline-flex; align-items: center; gap: 8px;
     background: var(--accent); color: var(--accent-ink);
-    font-weight: 600; font-size: 1rem;
-    padding: 13px 26px; border-radius: 12px; text-decoration: none;
-    transition: background-color 150ms ease-out, transform 100ms ease-out;
+    font-weight: 650; font-size: 1.02rem;
+    padding: 14px 30px; border-radius: 14px; text-decoration: none;
+    box-shadow: 0 0 28px oklch(0.6 0.15 255 / 0.35), var(--ring);
+    transition: background-color 150ms ease-out, box-shadow 150ms ease-out, transform 100ms ease-out;
   }
-  .btn-primary:hover { background: color-mix(in oklch, var(--accent) 88%, black); }
-  .btn-primary:active { transform: scale(0.98); }
-  .cta-note { font-size: 0.85rem; color: var(--ink-muted); width: 100%; margin-top: 2px; }
+  .btn-primary:hover {
+    background: color-mix(in oklch, var(--accent) 90%, white);
+    box-shadow: 0 0 40px oklch(0.6 0.15 255 / 0.5), var(--ring);
+  }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-ghost {
+    color: var(--muted); text-decoration: none; font-size: 0.95rem;
+    padding: 13px 20px; border-radius: 14px; box-shadow: var(--ring);
+    transition: color 150ms ease-out, box-shadow 150ms ease-out;
+  }
+  .btn-ghost:hover { color: var(--ink); box-shadow: var(--ring-hover); }
+  .cta-note { width: 100%; font-size: 0.85rem; color: var(--faint); }
   .cta-note a { color: inherit; }
 
-  /* ============ features ============ */
-  .features { padding-block: 40px 64px; }
-  .features .grid {
+  /* ============ 产品实景（纯 DOM 插画） ============ */
+  .stage { position: relative; padding-block: 44px 8px; }
+  .mock {
+    max-width: 860px; margin-inline: auto;
+    background: linear-gradient(oklch(0.21 0.02 262), oklch(0.18 0.02 262));
+    border-radius: 20px;
+    box-shadow: var(--ring), 0 30px 80px -30px oklch(0 0 0 / 0.7);
+    padding: 14px 18px 22px;
+    text-align: initial;
+    user-select: none; pointer-events: none;
+  }
+  .mock .bar { display: flex; gap: 6px; padding-block: 6px 14px; }
+  .mock .bar i { width: 10px; height: 10px; border-radius: 50%; background: oklch(1 0 0 / 0.12); }
+  .mock .row { display: flex; margin-top: 12px; }
+  .mock .user {
+    margin-inline-start: auto;
+    background: oklch(0.34 0.07 255); color: var(--ink);
+    padding: 10px 16px; border-radius: 14px 14px 4px 14px;
+    font-size: 0.92rem; max-width: 34ch;
+  }
+  .mock .steps {
+    display: flex; flex-direction: column; gap: 8px;
+    font-size: 0.83rem; color: var(--muted);
+    border-inline-start: 2px solid oklch(1 0 0 / 0.1);
+    padding-inline-start: 14px; margin-top: 18px;
+  }
+  .mock .steps .done::before { content: "✓ "; color: var(--ok); }
+  .mock .card {
+    margin-top: 14px; background: var(--surface-2); border-radius: 14px;
+    box-shadow: var(--ring); padding: 16px 18px; max-width: 520px;
+  }
+  .mock .card h4 { font-size: 0.9rem; font-weight: 650; }
+  .mock .chart { display: flex; align-items: flex-end; gap: 10px; height: 84px; margin-top: 14px; }
+  .mock .chart i {
+    flex: 1; border-radius: 6px 6px 2px 2px;
+    background: linear-gradient(oklch(0.68 0.13 255 / 0.9), oklch(0.55 0.12 262 / 0.5));
+  }
+  .mock .chart i:nth-child(1) { height: 42%; } .mock .chart i:nth-child(2) { height: 68%; }
+  .mock .chart i:nth-child(3) { height: 55%; } .mock .chart i:nth-child(4) { height: 90%; }
+  .mock .chart i:nth-child(5) { height: 34%; } .mock .chart i:nth-child(6) { height: 74%; }
+  .mock .chart .risk { background: linear-gradient(oklch(0.66 0.16 25 / 0.95), oklch(0.5 0.13 25 / 0.5)); }
+  .mock .legend { display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--faint); margin-top: 8px; }
+  .mock .approval { border-inline-start: 3px solid var(--accent); }
+  .mock .approval p { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+  .mock .actions { display: flex; gap: 10px; margin-top: 14px; }
+  .mock .actions .ok-btn, .mock .actions .no-btn {
+    font-size: 0.82rem; font-weight: 600; padding: 7px 16px; border-radius: 9px;
+  }
+  .mock .actions .ok-btn { background: var(--accent); color: var(--accent-ink); }
+  .mock .actions .no-btn { box-shadow: var(--ring); color: var(--muted); }
+
+  /* ============ bento 特性 ============ */
+  .features { padding-block: 88px 40px; }
+  .features h2, .download h2 {
+    font-size: clamp(1.7rem, 3vw, 2.2rem); font-weight: 720; letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .features .sub, .download .sub { color: var(--muted); margin-top: 10px; max-width: 52ch; text-wrap: pretty; }
+  .bento {
+    margin-top: 36px;
     display: grid; gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(12, 1fr);
   }
-  .card {
+  .cell {
+    grid-column: span 6;
     background: var(--surface);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: var(--elevation-raised);
-    transition: box-shadow 150ms ease-out;
+    border-radius: 18px; padding: 26px;
+    box-shadow: var(--ring);
+    transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+    position: relative; overflow: hidden;
   }
-  .card:hover { box-shadow: var(--elevation-raised-hover); }
-  .card h3 { font-size: 1.05rem; font-weight: 650; letter-spacing: -0.01em; }
-  .card p { margin-top: 8px; color: var(--ink-muted); font-size: 0.95rem; text-wrap: pretty; }
+  .cell:hover { box-shadow: var(--ring-hover); transform: translateY(-2px); }
+  .cell.small { grid-column: span 3; }
+  @media (max-width: 900px) { .cell, .cell.small { grid-column: span 12; } }
+  .cell h3 { font-size: 1.08rem; font-weight: 650; letter-spacing: -0.01em; }
+  .cell p { margin-top: 8px; color: var(--muted); font-size: 0.94rem; text-wrap: pretty; }
+  .cell .glyph { display: inline-flex; margin-bottom: 16px; color: var(--accent); }
+  .cell .glyph svg { width: 26px; height: 26px; }
+  /* 特色大卡内的迷你图形 */
+  .cell .mini-bars { display: flex; gap: 8px; align-items: flex-end; height: 56px; margin-bottom: 18px; max-width: 220px; }
+  .cell .mini-bars i { flex: 1; border-radius: 4px; background: linear-gradient(oklch(0.68 0.13 255 / 0.85), oklch(0.55 0.12 262 / 0.4)); }
+  .cell .mini-bars i:nth-child(1){height:38%} .cell .mini-bars i:nth-child(2){height:72%}
+  .cell .mini-bars i:nth-child(3){height:52%} .cell .mini-bars i:nth-child(4){height:94%}
+  .cell .mini-bars i:nth-child(5){height:60%}
+  .cell .mini-approve {
+    display: inline-flex; gap: 8px; align-items: center; margin-bottom: 18px;
+    background: var(--surface-2); box-shadow: var(--ring);
+    border-radius: 10px; padding: 9px 14px; font-size: 0.8rem; color: var(--muted);
+  }
+  .cell .mini-approve b { color: var(--accent-ink); background: var(--accent); border-radius: 6px; padding: 3px 10px; font-weight: 600; }
 
   /* ============ download ============ */
-  .download { padding-block: 24px 72px; }
-  .download h2, .features h2 {
-    font-size: 1.6rem; font-weight: 700; letter-spacing: -0.015em;
-    text-wrap: balance; margin-bottom: 24px;
-  }
-  .platforms { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); max-width: 720px; }
+  .download { padding-block: 48px 84px; }
+  .platforms { margin-top: 32px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); max-width: 760px; }
   .platform {
-    background: var(--surface); border-radius: 16px; padding: 24px;
-    box-shadow: var(--elevation-raised);
-    display: flex; flex-direction: column; gap: 6px;
+    background: var(--surface); border-radius: 18px; padding: 26px;
+    box-shadow: var(--ring); display: flex; flex-direction: column; gap: 6px;
   }
-  .platform .name { font-weight: 650; }
-  .platform .req { color: var(--ink-muted); font-size: 0.88rem; }
-  .platform .act { margin-top: 14px; }
+  .platform .name { font-weight: 650; font-size: 1.05rem; }
+  .platform .req { color: var(--muted); font-size: 0.88rem; }
+  .platform .act { margin-top: 16px; }
   .soon {
-    display: inline-block; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;
-    color: var(--ink-muted); background: var(--accent-soft);
-    padding: 3px 10px; border-radius: 999px;
+    display: inline-block; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--muted); box-shadow: var(--ring); padding: 5px 12px; border-radius: 999px;
   }
 
-  /* ============ footer ============ */
   footer {
-    border-top: var(--hairline) solid oklch(0.5 0.02 258 / 0.25);
-    padding-block: 28px 40px;
-    color: var(--ink-muted); font-size: 0.88rem;
+    border-top: var(--hairline) solid oklch(1 0 0 / 0.1);
+    padding-block: 30px 44px; color: var(--faint); font-size: 0.88rem;
   }
-  footer .wrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  footer .wrap { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+  footer a { color: var(--muted); }
   footer .spacer { margin-inline-start: auto; }
 
+  /* ============ 入场动画（一次/会话，marketing-pages 门控规则） ============ */
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  .intro .hero > * , .intro .stage .mock { animation: rise 550ms ease-out both; }
+  .intro .hero > *:nth-child(2) { animation-delay: 60ms; }
+  .intro .hero > *:nth-child(3) { animation-delay: 120ms; }
+  .intro .hero > *:nth-child(4) { animation-delay: 180ms; }
+  .intro .stage .mock { animation-delay: 260ms; }
   @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; }
+    * { animation: none !important; transition: none !important; }
   }
 </style>
 </head>
 <body>
+<div class="aurora" aria-hidden="true"></div>
+
 <header>
   <div class="wrap">
-    <span class="brand"><img src="favicon.png" alt="" width="28" height="28">Thaleon Copilot</span>
+    <span class="brand"><img src="favicon.png" alt="" width="30" height="30">Thaleon Copilot</span>
     <button class="lang-toggle" id="langToggle" aria-label="Switch language">
       <span data-l="zh">EN</span><span data-l="en">中文</span>
     </button>
@@ -176,61 +272,117 @@
 
 <main>
   <section class="hero wrap">
+    <span class="eyebrow">
+      <span data-l="zh">为马来西亚投资顾问打造</span>
+      <span data-l="en">Built for investment advisers in Malaysia</span>
+    </span>
     <h1>
-      <span data-l="zh">投资顾问的 AI 工作台</span>
-      <span data-l="en">The AI copilot for investment advisers</span>
+      <span data-l="zh">一天的案头工作<br><span class="grad">压缩成几段对话</span></span>
+      <span data-l="en">A day of desk work,<br><span class="grad">done in a few conversations</span></span>
     </h1>
     <p class="lede">
-      <span data-l="zh">分析客户组合、透视风险、起草跟进——出站动作永远先经你确认。Thaleon Copilot 把顾问一天的案头工作，压缩成几段对话。</span>
-      <span data-l="en">Analyse portfolios, surface risk, draft follow-ups — every outbound action waits for your approval. Thaleon Copilot turns a day of desk work into a few conversations.</span>
+      <span data-l="zh">分析客户组合、透视风险、起草跟进。出站动作永远先经你确认——AI 提效率，你握方向盘。</span>
+      <span data-l="en">Analyse portfolios, surface risk, draft follow-ups. Every outbound action waits for your approval — AI does the work, you keep the wheel.</span>
     </p>
     <div class="cta-row">
       <a class="btn-primary" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest">
         <span data-l="zh">下载 macOS 版</span>
         <span data-l="en">Download for macOS</span>
       </a>
+      <a class="btn-ghost" href="https://github.com/itechchoice/thaleon-copilot-releases/releases">
+        <span data-l="zh">全部版本</span>
+        <span data-l="en">All releases</span>
+      </a>
       <p class="cta-note">
-        <span data-l="zh">Apple 芯片 · macOS 12 或更高 · <a href="https://github.com/itechchoice/thaleon-copilot-releases/releases">全部版本</a></span>
-        <span data-l="en">Apple silicon · macOS 12 or later · <a href="https://github.com/itechchoice/thaleon-copilot-releases/releases">all releases</a></span>
+        <span data-l="zh">Apple 芯片 · macOS 12 或更高 · Windows 版即将推出</span>
+        <span data-l="en">Apple silicon · macOS 12 or later · Windows coming soon</span>
       </p>
     </div>
   </section>
 
+  <section class="stage wrap">
+    <div class="mock" role="img"
+      aria-label="Thaleon Copilot 工作实景：顾问一句话发起分析，AI 完成 X-Ray 风险透视并生成图表，发送邮件前弹出审批卡等待确认">
+      <div class="bar"><i></i><i></i><i></i></div>
+      <div class="row">
+        <span class="user">
+          <span data-l="zh">分析张先生的组合风险，把结论整理成邮件发给他</span>
+          <span data-l="en">Analyse Mr. Tan's portfolio risk and email him the summary</span>
+        </span>
+      </div>
+      <div class="steps">
+        <span class="done"><span data-l="zh">调取客户持仓（12 支基金）</span><span data-l="en">Pulled client holdings (12 funds)</span></span>
+        <span class="done"><span data-l="zh">X-Ray 风险透视完成</span><span data-l="en">X-Ray risk analysis complete</span></span>
+        <span class="done"><span data-l="zh">邮件草稿已生成，等待你审批</span><span data-l="en">Email drafted — waiting for your approval</span></span>
+      </div>
+      <div class="card">
+        <h4><span data-l="zh">资产配置 · 风险敞口</span><span data-l="en">Allocation · risk exposure</span></h4>
+        <div class="chart"><i></i><i></i><i></i><i class="risk"></i><i></i><i></i></div>
+        <div class="legend">
+          <span data-l="zh">股票 · 债券 · 货币 · 高风险 · 房托 · 其他</span>
+          <span data-l="en">Equity · Bonds · Cash · High-risk · REITs · Other</span>
+        </div>
+      </div>
+      <div class="card approval">
+        <h4><span data-l="zh">发送邮件给 张先生？</span><span data-l="en">Send email to Mr. Tan?</span></h4>
+        <p><span data-l="zh">主题：您的组合季度风险回顾 · 附 PDF 报告</span><span data-l="en">Subject: Your quarterly risk review · PDF attached</span></p>
+        <div class="actions">
+          <span class="ok-btn"><span data-l="zh">确认发送</span><span data-l="en">Approve &amp; send</span></span>
+          <span class="no-btn"><span data-l="zh">再改改</span><span data-l="en">Edit first</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section class="features wrap">
-    <h2>
-      <span data-l="zh">它替你做什么</span>
-      <span data-l="en">What it does for you</span>
-    </h2>
-    <div class="grid">
-      <div class="card">
+    <h2><span data-l="zh">它替你做什么</span><span data-l="en">What it does for you</span></h2>
+    <p class="sub">
+      <span data-l="zh">从组合分析到客户沟通，一个工作台接住顾问的一整天。</span>
+      <span data-l="en">From portfolio analysis to client communication — one workbench for the whole day.</span>
+    </p>
+    <div class="bento">
+      <div class="cell">
+        <div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
         <h3><span data-l="zh">组合与风险，一句话调出</span><span data-l="en">Portfolios and risk, on demand</span></h3>
-        <p><span data-l="zh">实时调取客户持仓，X-Ray 风险透视、换仓对比、投资旅程模拟，结果直接生成图表卡片。</span><span data-l="en">Pull live client holdings, run X-Ray risk analysis, what-if comparisons and journey simulations — results arrive as chart cards.</span></p>
+        <p><span data-l="zh">实时调取客户持仓，X-Ray 风险透视、换仓对比、投资旅程模拟——结果直接生成图表卡片，不用翻系统。</span><span data-l="en">Pull live client holdings, run X-Ray risk analysis, what-if comparisons and journey simulations — results arrive as chart cards.</span></p>
       </div>
-      <div class="card">
+      <div class="cell">
+        <div class="mini-approve" aria-hidden="true">
+          <span data-l="zh">发送邮件给客户？</span><span data-l="en">Send email to client?</span>
+          <b><span data-l="zh">确认</span><span data-l="en">Approve</span></b>
+        </div>
         <h3><span data-l="zh">出站永远先审批</span><span data-l="en">Outbound always needs approval</span></h3>
-        <p><span data-l="zh">邮件与 WhatsApp 先生成草稿，你预览、修改、确认后才发出。每次批准只放行一次。</span><span data-l="en">Emails and WhatsApp messages are drafted first; nothing is sent until you review and confirm. Each approval releases exactly one action.</span></p>
+        <p><span data-l="zh">邮件与 WhatsApp 先生成草稿，你预览、修改、确认后才发出。每次批准只放行一次动作。</span><span data-l="en">Emails and WhatsApp messages are drafted first; nothing goes out until you confirm. Each approval releases exactly one action.</span></p>
       </div>
-      <div class="card">
-        <h3><span data-l="zh">每个工作日自动盯盘</span><span data-l="en">Automated workday monitoring</span></h3>
-        <p><span data-l="zh">云端定时扫描全部客户组合，超出风控线即刻提醒，早晨一份人话简报等你。</span><span data-l="en">Scheduled cloud scans watch every client portfolio; breaches raise alerts, and a plain-language brief is ready each morning.</span></p>
+      <div class="cell small">
+        <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></svg></span>
+        <h3><span data-l="zh">每个工作日自动盯盘</span><span data-l="en">Workday monitoring</span></h3>
+        <p><span data-l="zh">云端定时扫描全部客户组合，超线即提醒，早晨一份人话简报。</span><span data-l="en">Cloud scans watch every portfolio; breaches alert you, briefs arrive each morning.</span></p>
       </div>
-      <div class="card">
+      <div class="cell small">
+        <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M10 13h5M10 17h5"/></svg></span>
         <h3><span data-l="zh">报告一键成型</span><span data-l="en">Reports in one step</span></h3>
-        <p><span data-l="zh">分析结论一键排版成正式 PDF 报告或演示文稿，中文排版开箱即用，零依赖安装。</span><span data-l="en">Turn conclusions into polished PDF reports or presentations in one step — no extra installs.</span></p>
+        <p><span data-l="zh">结论一键排版成正式 PDF 或演示文稿，中文排版开箱即用。</span><span data-l="en">Conclusions become polished PDFs or presentations — no extra installs.</span></p>
       </div>
-      <div class="card">
+      <div class="cell small">
+        <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>
         <h3><span data-l="zh">会议模式</span><span data-l="en">Meeting mode</span></h3>
-        <p><span data-l="zh">客户会议录音自动转成结构化纪要与跟进草稿，录音转写完立即删除。</span><span data-l="en">Client meetings become structured minutes and follow-up drafts; recordings are deleted right after transcription.</span></p>
+        <p><span data-l="zh">会议录音自动转成纪要与跟进草稿，转写完立即删除录音。</span><span data-l="en">Meetings become minutes and follow-up drafts; recordings are deleted after transcription.</span></p>
       </div>
-      <div class="card">
+      <div class="cell small">
+        <span class="glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l2-4h12l2 4M4 8h16M4 8v11h16V8"/><path d="M10 12h4"/></svg></span>
         <h3><span data-l="zh">技能商店</span><span data-l="en">A marketplace of skills</span></h3>
-        <p><span data-l="zh">按需安装经人工审核的技能、数据源与自动化流程，也能把你的常用操作一键做成定时任务。</span><span data-l="en">Install curated skills, data sources and automations — or turn your own routines into scheduled tasks.</span></p>
+        <p><span data-l="zh">按需安装人工审核过的技能与数据源，常用操作一键变定时任务。</span><span data-l="en">Install curated skills and data sources; turn routines into scheduled tasks.</span></p>
       </div>
     </div>
   </section>
 
   <section class="download wrap" id="download">
     <h2><span data-l="zh">下载</span><span data-l="en">Download</span></h2>
+    <p class="sub">
+      <span data-l="zh">发布与更新都在 GitHub Releases，版本历史完整可查。</span>
+      <span data-l="en">Releases and updates live on GitHub Releases with full history.</span>
+    </p>
     <div class="platforms">
       <div class="platform">
         <span class="name">macOS</span>
@@ -275,6 +427,12 @@
       document.title = value === 'zh'
         ? 'Thaleon Copilot — 投资顾问的 AI 工作台'
         : 'Thaleon Copilot — The AI copilot for investment advisers';
+    }
+
+    // 入场动画：一次/会话（sessionStorage 门控，marketing-pages 规则）
+    if (!sessionStorage.getItem('hasSeenIntro')) {
+      sessionStorage.setItem('hasSeenIntro', 'true');
+      document.body.classList.add('intro');
     }
   })();
 </script>
