@@ -285,7 +285,7 @@
       <span data-l="en">Analyse portfolios, surface risk, draft follow-ups. Every outbound action waits for your approval — AI does the work, you keep the wheel.</span>
     </p>
     <div class="cta-row">
-      <a class="btn-primary" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest">
+      <a class="btn-primary" data-dl="mac" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest">
         <span data-l="zh">下载 macOS 版</span>
         <span data-l="en">Download for macOS</span>
       </a>
@@ -387,12 +387,12 @@
       <div class="platform">
         <span class="name">macOS</span>
         <span class="req"><span data-l="zh">Apple 芯片（M 系列）· macOS 12 或更高</span><span data-l="en">Apple silicon (M-series) · macOS 12 or later</span></span>
-        <span class="act"><a class="btn-primary" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest"><span data-l="zh">下载 .dmg</span><span data-l="en">Download .dmg</span></a></span>
+        <span class="act"><a class="btn-primary" data-dl="mac" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest"><span data-l="zh">下载 .dmg</span><span data-l="en">Download .dmg</span></a></span>
       </div>
       <div class="platform">
         <span class="name">Windows</span>
         <span class="req"><span data-l="zh">Windows 10 · 64 位</span><span data-l="en">Windows 10 · 64-bit</span></span>
-        <span class="act"><a class="btn-ghost" style="display:inline-flex" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest"><span data-l="zh">下载 .exe（未签名测试版）</span><span data-l="en">Download .exe (unsigned test build)</span></a></span>
+        <span class="act"><a class="btn-ghost" style="display:inline-flex" data-dl="win" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest"><span data-l="zh">下载 .exe（未签名测试版）</span><span data-l="en">Download .exe (unsigned test build)</span></a></span>
       </div>
     </div>
   </section>
@@ -435,6 +435,28 @@
       document.body.classList.add('intro');
     }
   })();
+
+// 下载直链化（测试反馈 2026-08-07）：查最新 release 的资产直链，点击即下载；
+// API 失败/限流时静默保留 GitHub 发布页链接作回退。
+(function () {
+  fetch('https://api.github.com/repos/itechchoice/thaleon-copilot-releases/releases/latest')
+    .then(function (r) { return r.ok ? r.json() : null })
+    .then(function (rel) {
+      if (!rel || !rel.assets) return
+      var dmg = null, exe = null
+      rel.assets.forEach(function (a) {
+        if (/\.dmg$/.test(a.name)) dmg = a.browser_download_url
+        if (/\.exe$/.test(a.name)) exe = a.browser_download_url
+      })
+      document.querySelectorAll('[data-dl="mac"]').forEach(function (el) {
+        if (dmg) el.href = dmg
+      })
+      document.querySelectorAll('[data-dl="win"]').forEach(function (el) {
+        if (exe) el.href = exe
+      })
+    })
+    .catch(function () { /* 保留回退链接 */ })
+})()
 </script>
 </body>
 </html>
