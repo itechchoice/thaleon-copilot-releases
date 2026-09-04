@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thaleon Copilot · 隐私政策 / Privacy Policy</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+  :root { --ink:#171717; --muted:#6b7280; --line:#e5e7eb; --accent:#0A1F3D; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif; color:var(--ink); background:#fff; line-height:1.7; }
+  .wrap { max-width:820px; margin:0 auto; padding:48px 24px 80px; }
+  h1 { font-size:28px; margin:0 0 8px; }
+  h2 { font-size:20px; margin:36px 0 8px; }
+  .sub { color:var(--muted); margin:0 0 24px; }
+  .lang { display:flex; gap:8px; margin-bottom:24px; }
+  .lang button { border:1px solid var(--line); background:#fff; padding:6px 12px; border-radius:999px; cursor:pointer; font:inherit; }
+  .lang button[aria-pressed="true"] { background:var(--accent); color:#fff; border-color:var(--accent); }
+  section[data-lang] { display:none; }
+  section[data-lang].on { display:block; }
+  ul { padding-left:20px; }
+  footer { margin-top:48px; color:var(--muted); font-size:14px; border-top:1px solid var(--line); padding-top:16px; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Thaleon Copilot</h1>
+  <p class="sub">隐私政策 · Privacy Policy</p>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" data-set="zh" aria-pressed="true">中文</button>
+    <button type="button" data-set="en" aria-pressed="false">English</button>
+  </div>
+
+  <section data-lang="zh" class="on">
+    <p>Thaleon Copilot 是 Thaleon 投顾平台的桌面应用，面向持牌投资顾问使用。本政策说明应用处理哪些信息、存放在哪里、以及不做什么。</p>
+
+    <h2>1. 登录身份</h2>
+    <p>应用通过 Thaleon 后端的登录链路完成身份验证。登录后应用只保存一枚访问令牌，存放在本机操作系统的安全存储（macOS 钥匙串 / Windows 凭据保护）中，用于以你的顾问身份访问 Thaleon 后端。应用不会看到或保存你的密码。</p>
+
+    <h2>2. 客户与持仓数据</h2>
+    <p>客户资料、持仓、组合、基金产品等业务数据全部来自你的 Thaleon 账号，通过 Thaleon 后端接口按需读取。应用不会把这些数据上传到 Thaleon 之外的任何第三方服务。</p>
+
+    <h2>3. 本机存储</h2>
+    <p>对话记录、工作记忆、生成的文件（PDF、演示文稿、纪要）以及你安装的技能保存在本机用户目录中，只属于当前登录的顾问。卸载应用或清除应用数据即可删除。</p>
+
+    <h2>4. 对外发送</h2>
+    <p>邮件与 WhatsApp 消息只在你预览并确认后才会发出。邮件经你自己配置的邮箱服务器发出；WhatsApp 经你自己手机上的账号发出。应用不代表你自动向客户发送任何内容。</p>
+
+    <h2>5. 语言模型与联网</h2>
+    <p>应用使用云端语言模型服务来理解请求与生成文字。发送给模型的内容仅限完成当前任务所需的对话内容与数据摘要，不会用于训练。公开市场资讯通过联网搜索获取。</p>
+
+    <h2>6. 崩溃与诊断</h2>
+    <p>应用在本机记录运行日志用于排障，日志不会自动上传。你可以在需要支持时自行提供。</p>
+
+    <h2>7. 数据保留与删除</h2>
+    <p>本机数据由你控制，随时可以删除。云端定时任务与简报数据按顾问隔离保存，并在保留期后自动清理；关闭相关功能即停止产生新数据。</p>
+
+    <h2>8. 联系</h2>
+    <p>如有任何隐私相关问题，请联系 <a href="mailto:developer@thaleon.io">developer@thaleon.io</a>。</p>
+  </section>
+
+  <section data-lang="en">
+    <p>Thaleon Copilot is the desktop application of the Thaleon advisory platform, built for licensed investment advisors. This policy explains what information the app handles, where it lives, and what the app does not do.</p>
+
+    <h2>1. Sign-in identity</h2>
+    <p>The app authenticates through the Thaleon backend's sign-in flow. After sign-in it keeps only an access token, stored in the operating system's secure storage (macOS Keychain / Windows credential protection), to access the Thaleon backend as you. The app never sees or stores your password.</p>
+
+    <h2>2. Client and portfolio data</h2>
+    <p>Client profiles, holdings, portfolios and fund products all come from your Thaleon account and are read on demand through the Thaleon backend. The app does not upload this data to any third-party service outside Thaleon.</p>
+
+    <h2>3. Local storage</h2>
+    <p>Conversations, working memory, generated files (PDFs, presentations, minutes) and installed skills are stored in your local user directory and belong to the signed-in advisor only. Uninstalling the app or clearing its data removes them.</p>
+
+    <h2>4. Outbound messages</h2>
+    <p>Emails and WhatsApp messages are sent only after you preview and approve them. Email goes through the mail server you configured yourself; WhatsApp goes through the account on your own phone. The app never sends anything to a client on its own.</p>
+
+    <h2>5. Language models and connectivity</h2>
+    <p>The app uses cloud language model services to understand requests and generate text. Content sent to the model is limited to the conversation and data summaries needed for the current task and is not used for training. Public market information is retrieved through web search.</p>
+
+    <h2>6. Crash and diagnostic logs</h2>
+    <p>The app writes local logs for troubleshooting. Logs are never uploaded automatically; you may share them when requesting support.</p>
+
+    <h2>7. Retention and deletion</h2>
+    <p>Local data is under your control and can be deleted at any time. Cloud scheduled-task and brief data is stored per advisor and cleaned up automatically after its retention period; turning the related features off stops new data from being produced.</p>
+
+    <h2>8. Contact</h2>
+    <p>For any privacy question, contact <a href="mailto:developer@thaleon.io">developer@thaleon.io</a>.</p>
+  </section>
+
+  <footer>THALEON SDN. BHD. · <a href="https://thaleon.io">thaleon.io</a></footer>
+</div>
+<script>
+  const buttons = document.querySelectorAll('.lang button');
+  const show = lang => {
+    document.querySelectorAll('section[data-lang]').forEach(s => s.classList.toggle('on', s.dataset.lang === lang));
+    buttons.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.set === lang)));
+    document.documentElement.lang = lang;
+  };
+  buttons.forEach(b => b.addEventListener('click', () => show(b.dataset.set)));
+  if (/^en/i.test(navigator.language)) show('en');
+</script>
+</body>
+</html>
