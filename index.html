@@ -294,8 +294,8 @@
         <span data-l="en">All releases</span>
       </a>
       <p class="cta-note">
-        <span data-l="zh">Apple 芯片 · macOS 12 或更高 · Windows 10 测试版已可下载</span>
-        <span data-l="en">Apple silicon · macOS 12 or later · Windows 10 test build available</span>
+        <span data-l="zh">Apple 芯片 · macOS 12 或更高 · Windows 版请从 <a href="https://apps.microsoft.com/detail/9p2sdd6knbkh">Microsoft Store</a> 安装</span>
+        <span data-l="en">Apple silicon · macOS 12 or later · On Windows, install from <a href="https://apps.microsoft.com/detail/9p2sdd6knbkh">Microsoft Store</a></span>
       </p>
     </div>
   </section>
@@ -380,8 +380,8 @@
   <section class="download wrap" id="download">
     <h2><span data-l="zh">下载</span><span data-l="en">Download</span></h2>
     <p class="sub">
-      <span data-l="zh">发布与更新都在 GitHub Releases，版本历史完整可查。</span>
-      <span data-l="en">Releases and updates live on GitHub Releases with full history.</span>
+      <span data-l="zh">macOS 版在 GitHub Releases 发布与更新，版本历史完整可查；Windows 版通过 Microsoft Store 安装与更新。</span>
+      <span data-l="en">macOS releases and updates ship on GitHub Releases with full history; on Windows, install and update through Microsoft Store.</span>
     </p>
     <div class="platforms">
       <div class="platform">
@@ -391,8 +391,8 @@
       </div>
       <div class="platform">
         <span class="name">Windows</span>
-        <span class="req"><span data-l="zh">Windows 10 · 64 位</span><span data-l="en">Windows 10 · 64-bit</span></span>
-        <span class="act"><a class="btn-ghost" style="display:inline-flex" data-dl="win" href="https://github.com/itechchoice/thaleon-copilot-releases/releases/latest"><span data-l="zh">下载 .exe（未签名测试版）</span><span data-l="en">Download .exe (unsigned test build)</span></a></span>
+        <span class="req"><span data-l="zh">Windows 10 或更高 · 64 位</span><span data-l="en">Windows 10 or later · 64-bit</span></span>
+        <span class="act"><a class="btn-primary" href="https://apps.microsoft.com/detail/9p2sdd6knbkh"><span data-l="zh">从 Microsoft Store 安装</span><span data-l="en">Install from Microsoft Store</span></a></span>
       </div>
     </div>
   </section>
@@ -436,23 +436,19 @@
     }
   })();
 
-// 下载直链化（测试反馈 2026-08-07）：查最新 release 的资产直链，点击即下载；
-// API 失败/限流时静默保留 GitHub 发布页链接作回退。
+// 下载直链化（测试反馈 2026-08-07）：查最新 release 的 dmg 直链，点击即下载；
+// API 失败/限流时静默保留 GitHub 发布页链接作回退。Windows 只走 Microsoft Store，不在此处理。
 (function () {
   fetch('https://api.github.com/repos/itechchoice/thaleon-copilot-releases/releases/latest')
     .then(function (r) { return r.ok ? r.json() : null })
     .then(function (rel) {
       if (!rel || !rel.assets) return
-      var dmg = null, exe = null
+      var dmg = null
       rel.assets.forEach(function (a) {
         if (/\.dmg$/.test(a.name)) dmg = a.browser_download_url
-        if (/\.exe$/.test(a.name)) exe = a.browser_download_url
       })
       document.querySelectorAll('[data-dl="mac"]').forEach(function (el) {
         if (dmg) el.href = dmg
-      })
-      document.querySelectorAll('[data-dl="win"]').forEach(function (el) {
-        if (exe) el.href = exe
       })
     })
     .catch(function () { /* 保留回退链接 */ })
